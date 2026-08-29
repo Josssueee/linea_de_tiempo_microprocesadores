@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Línea del Tiempo de los Microprocesadores (1971 - Presente)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1d;
+            --bg-secondary: #111827;
+            --bg-card: #161f38;
+            --bg-card-hover: #1e2a4a;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-emerald: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-dim: #6b7280;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 242, 254, 0.25);
+            --timeline-line: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* HEADER & HERO */
+        header {
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(10, 15, 29, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 1.5rem 3rem;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        .badge-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* STATS BAR */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.25rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem 1rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .stat-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        /* CONTROLS (SEARCH & FILTER) */
+        .controls-container {
+            max-width: 1100px;
+            margin: 2.5rem auto 1rem;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.9rem 1.25rem 0.9rem 3rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            width: 18px;
+            height: 18px;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent-cyan);
+            color: #0a0f1d;
+            border-color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* TIMELINE LAYOUT */
+        .timeline-container {
+            max-width: 1150px;
+            margin: 3rem auto 6rem;
+            position: relative;
+            padding: 0 1.5rem;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple), var(--accent-emerald), var(--accent-cyan));
+            transform: translateX(-50%);
+            opacity: 0.4;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 860px) {
+            .timeline-container::before {
+                left: 30px;
+            }
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3.5rem;
+            width: 50%;
+            padding: 0 2.5rem;
+        }
+
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+            text-align: left;
+        }
+
+        @media (max-width: 860px) {
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 70px;
+                padding-right: 0;
+                text-align: left !important;
+            }
+        }
+
+        /* TIMELINE NODE PIN */
+        .timeline-node {
+            position: absolute;
+            top: 24px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #0a0f1d;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 12px var(--accent-cyan);
+            z-index: 10;
+        }
+
+        .timeline-item.left .timeline-node {
+            right: -9px;
+        }
+
+        .timeline-item.right .timeline-node {
+            left: -9px;
+        }
+
+        @media (max-width: 860px) {
+            .timeline-item .timeline-node {
+                left: 21px !important;
+                right: auto !important;
+            }
+        }
+
+        /* TIMELINE CARD */
+        .chip-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chip-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chip-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 242, 254, 0.4);
+            background: var(--bg-card-hover);
+            box-shadow: 0 20px 30px -10px rgba(0, 242, 254, 0.15);
+        }
+
+        .chip-card:hover::before {
+            opacity: 1;
+        }
+
+        /* CHIP HEADER */
+        .chip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .chip-vendor {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .vendor-intel { background: rgba(0, 113, 197, 0.2); color: #4facfe; border: 1px solid rgba(0, 113, 197, 0.4); }
+        .vendor-amd { background: rgba(237, 28, 36, 0.2); color: #ff6b6b; border: 1px solid rgba(237, 28, 36, 0.4); }
+        .vendor-apple { background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .vendor-motorola { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .vendor-mos { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .vendor-zilog { background: rgba(139, 92, 246, 0.2); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.4); }
+        .vendor-arm { background: rgba(0, 145, 255, 0.2); color: #38bdf8; border: 1px solid rgba(0, 145, 255, 0.4); }
+        .vendor-other { background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid rgba(107, 114, 128, 0.4); }
+
+        .chip-year {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.08);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .chip-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .chip-alias {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        /* CHIP IMAGE BANNER */
+        .chip-img-container {
+            width: 100%;
+            height: 180px;
+            background: #0d1322;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .chip-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.6));
+            transition: transform 0.4s ease;
+        }
+
+        .chip-card:hover .chip-img {
+            transform: scale(1.05);
+        }
+
+        /* SPECS GRID */
+        .specs-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            background: rgba(10, 15, 29, 0.6);
+            padding: 0.85rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spec-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .spec-val {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* DESCRIPTION & INNOVATION */
+        .chip-desc {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .chip-highlight {
+            font-size: 0.82rem;
+            color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.05);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background: var(--accent-cyan);
+            color: #0a0f1d;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="badge-hero">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+            Compendio Histórico de Arquitectura de Computadores
+        </div>
+        <h1>Línea del Tiempo de los Microprocesadores</h1>
+        <p class="subtitle">
+            Un recorrido exhaustivo desde el revolucionario Intel 4004 de 4 bits en 1971 hasta los avanzados procesadores de 3 nanómetros con aceleración de Inteligencia Artificial en 2024.
+        </p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num">35</div>
+                <div class="stat-lbl">Procesadores Clave</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">53+ Años</div>
+                <div class="stat-lbl">De Evolución</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">4-bit → 64-bit</div>
+                <div class="stat-lbl">Ancho de Palabra</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">2.3K → 92B+</div>
+                <div class="stat-lbl">Transistores</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="controls-container">
+            <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar microprocesador por nombre, año, arquitectura, transistores o fabricante...">
+            </div>
+
+            <div class="filter-tags" id="filterTags">
+                <button class="filter-btn active" data-filter="all">Todos (35)</button>
+                <button class="filter-btn" data-filter="intel">Intel</button>
+                <button class="filter-btn" data-filter="amd">AMD</button>
+                <button class="filter-btn" data-filter="apple">Apple</button>
+                <button class="filter-btn" data-filter="motorola">Motorola</button>
+                <button class="filter-btn" data-filter="mos">MOS / Zilog</button>
+                <button class="filter-btn" data-filter="risc">ARM / RISC</button>
+                <button class="filter-btn" data-filter="classic">Clásicos (1971-1989)</button>
+                <button class="filter-btn" data-filter="modern">Modernos (2000-Hoy)</button>
+            </div>
+        </section>
+
+        <section class="timeline-container" id="timelineContainer">
+            <!-- CARDS WILL BE RENDERED HERE -->
+        </section>
+    </main>
+
+    <button class="back-to-top" id="backToTop" title="Volver arriba">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+    </button>
+
+    <footer>
+        <p><strong>Línea del Tiempo de los Microprocesadores</strong> — Diseñado para publicación web en GitHub Pages.</p>
+        <p style="margin-top:0.5rem; font-size: 0.8rem;">Fuentes y especificaciones validadas por registros de la IEEE, Computer History Museum y manuales técnicos oficiales de fabricantes.</p>
+    </footer>
+
+    <script>
+        const processors = [
+            {
+                id: "intel-4004",
+                name: "Intel 4004",
+                alias: "El primer microprocesador comercial del mundo",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1971 (Nov)",
+                bits: "4 bits",
+                clock: "740 kHz (0.74 MHz)",
+                transistors: "2,300",
+                process: "10 µm PMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Intel_C4004.jpg/400px-Intel_C4004.jpg",
+                desc: "Diseñado por Federico Faggin, Ted Hoff y Masatoshi Shima para la calculadora Busicom 141-PF. Integró por primera vez en la historia toda la unidad central de procesamiento en un único chip monolítico de silicio.",
+                highlight: "Dio inicio a la era de la microcomputación. Capaz de ejecutar 60,000 operaciones por segundo."
+            },
+            {
+                id: "intel-8008",
+                name: "Intel 8008",
+                alias: "Primer microprocesador de 8 bits",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1972 (Abr)",
+                bits: "8 bits",
+                clock: "500 - 800 kHz",
+                transistors: "3,500",
+                process: "10 µm PMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Intel_8008_white_background.jpg/400px-Intel_8008_white_background.jpg",
+                desc: "Comisionado originalmente por Computer Terminal Corporation (CTC) para su terminal Datapoint 2200. Duplicó el ancho de bus de datos y permitió direccionar hasta 16 KB de memoria.",
+                highlight: "Hizo posible las primeras microcomputadoras para aficionados como la Scelbi-8H y la Mark-8."
+            },
+            {
+                id: "intel-8080",
+                name: "Intel 8080",
+                alias: "El cerebro de la primera microcomputadora personal",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1974 (Abr)",
+                bits: "8 bits",
+                clock: "2.0 - 3.125 MHz",
+                transistors: "6,000",
+                process: "6 µm NMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Intel_C8080A.jpg/400px-Intel_C8080A.jpg",
+                desc: "Considerado el primer microprocesador de propósito general verdaderamente práctico. Con tecnología NMOS, multiplicó por 10 el rendimiento del 8008 y direccionaba 64 KB de memoria.",
+                highlight: "Impulsó la célebre Altair 8800, el nacimiento de Microsoft (Altair BASIC) y el sistema operativo CP/M."
+            },
+            {
+                id: "motorola-6800",
+                name: "Motorola 6800",
+                alias: "Pionero del estándar de alimentación única a 5V",
+                vendor: "Motorola",
+                vendorClass: "vendor-motorola",
+                category: ["motorola", "classic"],
+                year: "1974 (Ago)",
+                bits: "8 bits",
+                clock: "1.0 - 2.0 MHz",
+                transistors: "4,100",
+                process: "6 µm NMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Motorola_MC6800P.jpg/400px-Motorola_MC6800P.jpg",
+                desc: "Primer microprocesador fabricado por Motorola. A diferencia de sus rivales, requería una única fuente de alimentación de 5V y ofrecía un bus de control coherente.",
+                highlight: "Fue la base conceptual sobre la que varios ingenieros desertores crearon el legendario MOS 6502."
+            },
+            {
+                id: "mos-6502",
+                name: "MOS Technology 6502",
+                alias: "El motor de la revolución del Apple II y la NES",
+                vendor: "MOS Tech",
+                vendorClass: "vendor-mos",
+                category: ["mos", "classic"],
+                year: "1975 (Sep)",
+                bits: "8 bits",
+                clock: "1.0 - 2.0 MHz",
+                transistors: "3,510",
+                process: "8 µm NMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/MOS_6502_top_view.jpg/400px-MOS_6502_top_view.jpg",
+                desc: "Diseñado por Chuck Peddle por tan solo $25 dólares (frente a los $300 de la competencia), democratizó el hardware de cómputo en todo el mundo.",
+                highlight: "Equipó las computadoras Apple I, Apple II, Commodore PET, VIC-20 y las consolas Atari 2600 y Nintendo NES."
+            },
+            {
+                id: "zilog-z80",
+                name: "Zilog Z80",
+                alias: "El estándar de oro de 8 bits y retroinformática",
+                vendor: "Zilog",
+                vendorClass: "vendor-zilog",
+                category: ["mos", "classic"],
+                year: "1976 (Jul)",
+                bits: "8 bits",
+                clock: "2.5 - 8.0 MHz",
+                transistors: "8,500",
+                process: "4 µm NMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Z80_CPU.jpg/400px-Z80_CPU.jpg",
+                desc: "Creado por Federico Faggin tras fundar Zilog. Totalmente compatible en código máquina con el Intel 8080, pero con el doble de registros y refresco de DRAM integrado.",
+                highlight: "Dominó el ZX Spectrum, MSX, Amstrad CPC, Sega Master System y el Game Boy original (variante)."
+            },
+            {
+                id: "intel-8086",
+                name: "Intel 8086",
+                alias: "El nacimiento de la arquitectura x86",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1978 (Jun)",
+                bits: "16 bits",
+                clock: "5.0 - 10.0 MHz",
+                transistors: "29,000",
+                process: "3 µm HMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Intel_8086.jpg/400px-Intel_8086.jpg",
+                desc: "Microprocesador que inauguró el conjunto de instrucciones x86. Introdujo el esquema de segmentación de memoria para direccionar hasta 1 MB de RAM física.",
+                highlight: "Estableció el estándar de conjunto de instrucciones dominante en la computación personal hasta la fecha."
+            },
+            {
+                id: "intel-8088",
+                name: "Intel 8088",
+                alias: "El procesador del legendario IBM PC 5150",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1979 (Jun)",
+                bits: "16 bits (Bus ext. 8-bit)",
+                clock: "4.77 - 10.0 MHz",
+                transistors: "29,000",
+                process: "3 µm HMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Intel_8088.jpg/400px-Intel_8088.jpg",
+                desc: "Variante de bajo coste del 8086 con arquitectura interna de 16 bits y bus de datos externo de 8 bits para permitir el uso de componentes más económicos.",
+                highlight: "Elegido por IBM en 1981 para crear la IBM Personal Computer (IBM PC), estandarizando el mercado de la informática corporativa y doméstica."
+            },
+            {
+                id: "motorola-68000",
+                name: "Motorola 68000 (m68k)",
+                alias: "La potencia de 32 bits para Macintosh y Genesis",
+                vendor: "Motorola",
+                vendorClass: "vendor-motorola",
+                category: ["motorola", "classic"],
+                year: "1979 (Sep)",
+                bits: "16/32 bits",
+                clock: "8.0 - 16.0 MHz",
+                transistors: "68,000",
+                process: "3.5 µm HMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Motorola_68000.jpg/400px-Motorola_68000.jpg",
+                desc: "Arquitectura ortogonal con 16 registros de 32 bits y bus de 16 bits. Ofrecía un espacio de memoria lineal plano de 16 MB sin necesidad de segmentos.",
+                highlight: "Potenció computadoras históricas con interfaz gráfica como Apple Lisa, Macintosh (1984), Amiga, Atari ST y la consola Sega Genesis."
+            },
+            {
+                id: "intel-80286",
+                name: "Intel 80286 (i286)",
+                alias: "Introducción del Modo Protegido y memoria virtual",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1982 (Feb)",
+                bits: "16 bits",
+                clock: "6.0 - 25.0 MHz",
+                transistors: "134,000",
+                process: "1.5 µm HMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Intel_A80286-10.jpg/400px-Intel_A80286-10.jpg",
+                desc: "Multiplicó por tres el rendimiento del 8086. Introdujo el Modo Protegido con soporte por hardware para multitarea, memoria virtual paginada y protección de memoria.",
+                highlight: "Fue el núcleo de la IBM PC/AT (1984), permitiendo direccionar hasta 16 MB de memoria física y 1 GB de memoria virtual."
+            },
+            {
+                id: "arm1-arm2",
+                name: "ARM1 / ARM2 (Acorn RISC)",
+                alias: "El origen de la arquitectura móvil más usada del planeta",
+                vendor: "ARM / Acorn",
+                vendorClass: "vendor-arm",
+                category: ["risc", "classic"],
+                year: "1985 - 1986",
+                bits: "32 bits RISC",
+                clock: "6.0 - 8.0 MHz",
+                transistors: "25,000 - 27,000",
+                process: "3.0 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Acorn_ARM2_processor.jpg/400px-Acorn_ARM2_processor.jpg",
+                desc: "Diseñado por Sophie Wilson y Steve Furber en Acorn Computers con una filosofía RISC simple y extremadamente eficiente en consumo eléctrico.",
+                highlight: "Génesis de la arquitectura ARM que impulsa actualmente más del 95% de los smartphones y dispositivos embebidos del mundo."
+            },
+            {
+                id: "intel-80386",
+                name: "Intel 80386 (386 DX)",
+                alias: "La consagración de la arquitectura x86 de 32 bits (IA-32)",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1985 (Oct)",
+                bits: "32 bits",
+                clock: "16.0 - 33.0 MHz",
+                transistors: "275,000",
+                process: "1.5 µm - 1.0 µm CHMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Intel_A80386DX-20.jpg/400px-Intel_A80386DX-20.jpg",
+                desc: "Primer procesador x86 con arquitectura y buses de datos/direcciones íntegramente de 32 bits. Introdujo paginación por hardware y el Modo Virtual 8086.",
+                highlight: "Permitió la verdadera multitarea en sistemas x86, siendo el procesador donde Linus Torvalds desarrolló la versión 0.01 del kernel Linux."
+            },
+            {
+                id: "mips-r2000",
+                name: "MIPS R2000 / R3000",
+                alias: "El referente de la computación RISC de alto rendimiento",
+                vendor: "MIPS",
+                vendorClass: "vendor-other",
+                category: ["risc", "classic"],
+                year: "1986 - 1988",
+                bits: "32 bits RISC",
+                clock: "16.67 - 40.0 MHz",
+                transistors: "115,000",
+                process: "1.2 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/MIPS_R3000A.jpg/400px-MIPS_R3000A.jpg",
+                desc: "Desarrollado en Stanford por John L. Hennessy. Implementó una arquitectura de pipeline estricta sin interbloqueos por hardware (Microprocessor without Interlocked Pipeline Stages).",
+                highlight: "Motor de las estaciones Silicon Graphics (SGI) de Hollywood y base del CPU de la Sony PlayStation original."
+            },
+            {
+                id: "sun-sparc",
+                name: "Sun SPARC",
+                alias: "Pionero en estaciones UNIX y ventanas de registros",
+                vendor: "Sun / Fujitsu",
+                vendorClass: "vendor-other",
+                category: ["risc", "classic"],
+                year: "1987",
+                bits: "32 bits RISC",
+                clock: "16.6 - 40.0 MHz",
+                transistors: "~100,000",
+                process: "1.3 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Sun_MicroSPARC.jpg/400px-Sun_MicroSPARC.jpg",
+                desc: "Arquitectura abierta Scalable Processor Architecture (SPARC) basada en la investigación RISC II de UC Berkeley. Utilizaba la técnica de ventanas de registros para llamadas a función ultrarrápidas.",
+                highlight: "Impulsó el dominio de las estaciones de trabajo Sun SPARCstation y el sistema operativo Solaris en internet y centros de datos."
+            },
+            {
+                id: "intel-80486",
+                name: "Intel 80486 (i486 DX)",
+                alias: "Superación del millón de transistores y FPU integrada",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1989 (Abr)",
+                bits: "32 bits",
+                clock: "25.0 - 50.0 MHz (hasta 100 MHz DX4)",
+                transistors: "1,200,000",
+                process: "1.0 µm - 0.6 µm CHMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Intel_A80486DX-33.jpg/400px-Intel_A80486DX-33.jpg",
+                desc: "Primer x86 en superar el millón de transistores. Integró la unidad de punto flotante (FPU 80387) y una memoria caché L1 de 8 KB dentro del mismo troquel de silicio.",
+                highlight: "Introdujo un pipeline de 5 etapas, permitiendo que muchas instrucciones se ejecutaran en un solo ciclo de reloj."
+            },
+            {
+                id: "dec-alpha-21064",
+                name: "DEC Alpha 21064 (EV4)",
+                alias: "El rey indiscutible de la velocidad en los años 90",
+                vendor: "DEC",
+                vendorClass: "vendor-other",
+                category: ["risc", "classic"],
+                year: "1992 (Feb)",
+                bits: "64 bits RISC puro",
+                clock: "150 - 200 MHz",
+                transistors: "1,680,000",
+                process: "0.75 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/DEC_Alpha_21064.jpg/400px-DEC_Alpha_21064.jpg",
+                desc: "Arquitectura pura de 64 bits diseñada para romper barreras de frecuencia de reloj. Duplicó en velocidad a cualquier procesador de Intel o Motorola de su época.",
+                highlight: "Utilizado en servidores de cómputo científico, clústeres de renderizado de cine y estaciones de trabajo de alto rendimiento."
+            },
+            {
+                id: "intel-pentium",
+                name: "Intel Pentium (P5)",
+                alias: "La era superescalar y multimedia en el PC",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1993 (Mar)",
+                bits: "32 bits (Bus ext. 64-bit)",
+                clock: "60 - 200 MHz",
+                transistors: "3,100,000",
+                process: "0.8 µm - 0.35 µm BICMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Intel_Pentium_A80501-60.jpg/400px-Intel_Pentium_A80501-60.jpg",
+                desc: "Primera CPU x86 superescalar con capacidad de ejecutar dos instrucciones por ciclo de reloj simultáneamente mediante sus pipelines duales (U y V).",
+                highlight: "Consolidó la marca Pentium a nivel global y aceleró la era de internet y los videojuegos 3D en computadoras personales."
+            },
+            {
+                id: "powerpc-601",
+                name: "PowerPC 601 (AIM)",
+                alias: "La gran alianza de Apple, IBM y Motorola",
+                vendor: "Apple / IBM / Mot",
+                vendorClass: "vendor-other",
+                category: ["risc", "classic"],
+                year: "1993 (Oct)",
+                bits: "32 bits RISC",
+                clock: "50 - 80 MHz",
+                transistors: "2,800,000",
+                process: "0.6 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/PowerPC_601.jpg/400px-PowerPC_601.jpg",
+                desc: "Primer fruto de la alianza AIM (Apple, IBM y Motorola) para crear una arquitectura RISC potente capaz de destronar el monopolio Wintel.",
+                highlight: "Fue el corazón de la transición de Apple a la legendaria línea Power Macintosh y de los servidores IBM RS/6000."
+            },
+            {
+                id: "cyrix-6x86",
+                name: "Cyrix 6x86 (M1)",
+                alias: "El desafiante con ejecución fuera de orden",
+                vendor: "Cyrix / IBM",
+                vendorClass: "vendor-other",
+                category: ["classic"],
+                year: "1995 (Oct)",
+                bits: "32 bits",
+                clock: "100 - 133 MHz (PR133 - PR200)",
+                transistors: "3,000,000",
+                process: "0.65 µm CMOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cyrix_6x86_P166%2B.jpg/400px-Cyrix_6x86_P166%2B.jpg",
+                desc: "Diseño x86 innovador que superaba en rendimiento en enteros al Pentium de Intel a frecuencias menores gracias a su avanzada ejecución especulativa y fuera de orden.",
+                highlight: "Popularizó la nomenclatura 'Performance Rating' (PR) para competir frente a los MHz inflados de Intel."
+            },
+            {
+                id: "amd-k6",
+                name: "AMD K6",
+                alias: "La traducción de CISC a RISC86 en el Socket 7",
+                vendor: "AMD",
+                vendorClass: "vendor-amd",
+                category: ["amd", "classic"],
+                year: "1997 (Abr)",
+                bits: "32 bits",
+                clock: "166 - 300 MHz",
+                transistors: "8,800,000",
+                process: "0.35 µm - 0.25 µm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/AMD_K6-200.jpg/400px-AMD_K6-200.jpg",
+                desc: "Basado en el microdiseño Nx686 de NexGen; decodificaba internamente las complejas instrucciones x86 en micro-operaciones RISC sencillas (RISC86).",
+                highlight: "Permitió a AMD ofrecer un rendimiento equivalente a los costosos Pentium II a una fracción de su precio en placas Socket 7."
+            },
+            {
+                id: "intel-pentium-iii",
+                name: "Intel Pentium III (Katmai / Coppermine)",
+                alias: "Aceleración vectorial SSE y caché L2 en el troquel",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "classic"],
+                year: "1999 (Feb)",
+                bits: "32 bits",
+                clock: "450 MHz - 1.4 GHz",
+                transistors: "9.5M - 28M",
+                process: "250 nm - 180 nm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Intel_Pentium_III_Coppermine.jpg/400px-Intel_Pentium_III_Coppermine.jpg",
+                desc: "Introdujo las 70 nuevas instrucciones SIMD (Streaming SIMD Extensions - SSE) para cálculo en punto flotante paralelo, acelerando gráficos y streaming de video.",
+                highlight: "El núcleo Coppermine integró 256 KB de memoria caché L2 'Advanced Transfer Cache' a la velocidad total del reloj del CPU."
+            },
+            {
+                id: "amd-athlon-k7",
+                name: "AMD Athlon (K7)",
+                alias: "El primer procesador en romper la barrera de 1 GHz",
+                vendor: "AMD",
+                vendorClass: "vendor-amd",
+                category: ["amd", "modern"],
+                year: "1999 - 2000",
+                bits: "32 bits",
+                clock: "500 MHz - 1.4 GHz",
+                transistors: "22M - 37M",
+                process: "250 nm - 180 nm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/AMD_Athlon_1000_Slot_A.jpg/400px-AMD_Athlon_1000_Slot_A.jpg",
+                desc: "Diseñado por Dirk Meyer usando el bus EV6 de 200 MHz licenciado de DEC Alpha. Rompió el monopolio del rendimiento de Intel en la gama entusiasta.",
+                highlight: "En marzo de 2000, AMD se convirtió en el primer fabricante de la historia en comercializar un procesador a 1,000 MHz (1 GHz)."
+            },
+            {
+                id: "intel-pentium-4",
+                name: "Intel Pentium 4 (NetBurst)",
+                alias: "La microarquitectura de tuberías profundas NetBurst",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "modern"],
+                year: "2000 (Nov)",
+                bits: "32 bits (posterior 64-bit)",
+                clock: "1.4 - 3.8 GHz",
+                transistors: "42M - 125M",
+                process: "180 nm - 90 nm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Intel_Pentium_4_Northwood.jpg/400px-Intel_Pentium_4_Northwood.jpg",
+                desc: "Microarquitectura NetBurst con tuberías (pipelines) de 20 a 31 etapas optimizadas para alcanzar frecuencias de reloj extremadamente altas.",
+                highlight: "Introdujo el conjunto de instrucciones SSE2 y la tecnología Hyper-Threading (SMT) en procesadores domésticos."
+            },
+            {
+                id: "amd-athlon-64",
+                name: "AMD Athlon 64 / Opteron (K8)",
+                alias: "La invención de la arquitectura x86-64 (AMD64)",
+                vendor: "AMD",
+                vendorClass: "vendor-amd",
+                category: ["amd", "modern"],
+                year: "2003 (Sep)",
+                bits: "64 bits (AMD64)",
+                clock: "1.8 - 2.4 GHz",
+                transistors: "105.9 millones",
+                process: "130 nm SOI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/AMD_Athlon_64_ADA3200AEP4AX.jpg/400px-AMD_Athlon_64_ADA3200AEP4AX.jpg",
+                desc: "Creó la extensión x86 de 64 bits (AMD64 / x86-64) con retrocompatibilidad perfecta de 32 bits, integró el controlador de memoria DDR en el silicio e introdujo el bus HyperTransport.",
+                highlight: "Forzó a toda la industria, incluida Intel y Microsoft, a adoptar el estándar de 64 bits definido por AMD."
+            },
+            {
+                id: "ibm-cell-be",
+                name: "IBM Cell Broadband Engine (Cell BE)",
+                alias: "El coloso heterogéneo de la PlayStation 3",
+                vendor: "Sony / IBM / Tosh",
+                vendorClass: "vendor-other",
+                category: ["risc", "modern"],
+                year: "2005 (Feb)",
+                bits: "64 bits Power + 8x SPEs",
+                clock: "3.2 GHz",
+                transistors: "241 millones",
+                process: "90 nm - 45 nm SOI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Sony_Playstation_3_Cell_Broadband_Engine.jpg/400px-Sony_Playstation_3_Cell_Broadband_Engine.jpg",
+                desc: "Diseño multicore heterogéneo compuesto por un procesador PowerPC maestro (PPE) y 8 procesadores vectoriales SIMD de 128 bits (SPEs).",
+                highlight: "Potenció la PlayStation 3 y el supercomputador IBM Roadrunner (el primero en superar 1 PetaFLOP de cálculo sostenido)."
+            },
+            {
+                id: "intel-core-2-duo",
+                name: "Intel Core 2 Duo (Conroe)",
+                alias: "El renacimiento de la eficiencia y el doble núcleo nativo",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "modern"],
+                year: "2006 (Jul)",
+                bits: "64 bits",
+                clock: "1.86 - 3.0 GHz",
+                transistors: "291 millones",
+                process: "65 nm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Intel_Core_2_Duo_E6600.jpg/400px-Intel_Core_2_Duo_E6600.jpg",
+                desc: "Sepultó definitivamente las ineficiencias térmicas de NetBurst con la microarquitectura Intel Core basada en pipelines cortos y alto IPC (instrucciones por ciclo).",
+                highlight: "Devolvió el liderazgo absoluto de rendimiento monohilo y eficiencia energética por vatio a Intel."
+            },
+            {
+                id: "intel-core-i7-nehalem",
+                name: "Intel Core i7 (Nehalem / Bloomfield)",
+                alias: "La llegada de la familia Core 'i' moderna y el bus QPI",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "modern"],
+                year: "2008 (Nov)",
+                bits: "64 bits",
+                clock: "2.66 - 3.33 GHz",
+                transistors: "731 millones",
+                process: "45 nm High-k",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Intel_Core_i7-920.jpg/400px-Intel_Core_i7-920.jpg",
+                desc: "Integró controlador de memoria DDR3 de triple canal, reemplazó el bus frontal (FSB) por QuickPath Interconnect (QPI), reintrodujo Hyper-Threading e incorporó caché L3 compartida.",
+                highlight: "Estableció la nomenclatura 'Core i3 / i5 / i7' y la base arquitectónica de Intel durante más de una década."
+            },
+            {
+                id: "apple-a4",
+                name: "Apple A4",
+                alias: "El inicio de la era de silicio personalizado en Cupertino",
+                vendor: "Apple",
+                vendorClass: "vendor-apple",
+                category: ["apple", "risc", "modern"],
+                year: "2010 (Abr)",
+                bits: "32 bits ARM (Cortex-A8)",
+                clock: "1.0 GHz",
+                transistors: "~45 millones",
+                process: "45 nm",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Apple_A4_APL0398.jpg/400px-Apple_A4_APL0398.jpg",
+                desc: "Primer System-on-Chip (SoC) con diseño y controladores personalizados por Apple tras la compra del equipo de ingenieros de P.A. Semi.",
+                highlight: "Impulsó el revolucionario iPad original de 1ª generación y el iPhone 4 con pantalla de alta resolución Retina Display."
+            },
+            {
+                id: "amd-fx-8350",
+                name: "AMD FX-8350 (Bulldozer / Piledriver)",
+                alias: "El primer procesador de 8 núcleos a 4.0 GHz de fábrica",
+                vendor: "AMD",
+                vendorClass: "vendor-amd",
+                category: ["amd", "modern"],
+                year: "2012 (Oct)",
+                bits: "64 bits",
+                clock: "4.0 - 4.2 GHz Turbo",
+                transistors: "1,200 millones",
+                process: "32 nm SOI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/AMD_FX-8350.jpg/400px-AMD_FX-8350.jpg",
+                desc: "Arquitectura modular Clustered Multithreading (CMT) con módulos de núcleos dobles enteros compartiendo una FPU común de punto flotante.",
+                highlight: "Fue el primer procesador de consumo en superar la barrera de los 4 GHz de frecuencia base de serie en todos sus núcleos."
+            },
+            {
+                id: "apple-a7",
+                name: "Apple A7 (Cyclone)",
+                alias: "El terremoto de los 64 bits en la computación móvil",
+                vendor: "Apple",
+                vendorClass: "vendor-apple",
+                category: ["apple", "risc", "modern"],
+                year: "2013 (Sep)",
+                bits: "64 bits ARM (ARMv8-A)",
+                clock: "1.3 - 1.4 GHz",
+                transistors: "1,000 millones+",
+                process: "28 nm HKMG",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Apple_A7_APL0698.jpg/400px-Apple_A7_APL0698.jpg",
+                desc: "Primer procesador móvil de 64 bits de la historia implementado en un teléfono comercial (iPhone 5s). Con una microarquitectura de ancho de ejecución similar a la de un procesador de escritorio.",
+                highlight: "Forzó a Google, Qualcomm y la industria de semiconductores a acelerar abruptamente la transición completa del software móvil hacia 64 bits."
+            },
+            {
+                id: "amd-ryzen-7-1800x",
+                name: "AMD Ryzen 7 1800X (Zen)",
+                alias: "El renacimiento de AMD y la democratización del multinúcleo",
+                vendor: "AMD",
+                vendorClass: "vendor-amd",
+                category: ["amd", "modern"],
+                year: "2017 (Mar)",
+                bits: "64 bits x86-64",
+                clock: "3.6 - 4.0 GHz Boost",
+                transistors: "4,800 millones",
+                process: "14 nm FinFET",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/AMD_Ryzen_7_1800X.jpg/400px-AMD_Ryzen_7_1800X.jpg",
+                desc: "Diseñado bajo la dirección de Jim Keller; incrementó un histórico +52% las instrucciones por ciclo (IPC) respecto a la generación previa y utilizó el bus Infinity Fabric.",
+                highlight: "Ofreció 8 núcleos y 16 hilos por menos de la mitad del precio de las plataformas de gama extrema de Intel, redefiniendo la competencia en PCs."
+            },
+            {
+                id: "apple-m1",
+                name: "Apple M1",
+                alias: "La revolución del rendimiento por vatio en computadoras personales",
+                vendor: "Apple",
+                vendorClass: "vendor-apple",
+                category: ["apple", "risc", "modern"],
+                year: "2020 (Nov)",
+                bits: "64 bits ARM (Apple Silicon)",
+                clock: "3.2 GHz",
+                transistors: "16,000 millones",
+                process: "5 nm TSMC",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Apple_M1_chip.jpg/400px-Apple_M1_chip.jpg",
+                desc: "Unificó en un solo chip de 5nm núcleos de alto rendimiento (Firestorm), núcleos de alta eficiencia (Icestorm), GPU integrada, Neural Engine de 16 núcleos y Memoria Unificada (UMA).",
+                highlight: "Transformó la autonomía y la potencia térmica de las laptops MacBook, iniciando la despedida definitiva de los procesadores Intel en Apple."
+            },
+            {
+                id: "intel-core-i9-12900k",
+                name: "Intel Core i9-12900K (Alder Lake)",
+                alias: "La adopción de arquitectura híbrida (P-Cores + E-Cores) en x86",
+                vendor: "Intel",
+                vendorClass: "vendor-intel",
+                category: ["intel", "modern"],
+                year: "2021 (Nov)",
+                bits: "64 bits x86-64",
+                clock: "3.2 - 5.2 GHz Boost",
+                transistors: "~13,500 millones",
+                process: "Intel 7 (10 nm Enhanced)",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Intel_Core_i9-12900K_top.jpg/400px-Intel_Core_i9-12900K_top.jpg",
+                desc: "Combinó 8 núcleos de alto rendimiento Golden Cove con 8 núcleos de alta eficiencia Gracemont gestionados en tiempo real por el hardware Intel Thread Director.",
+                highlight: "Primer procesador comercial con soporte integrado para memorias DDR5 de alta velocidad e interfaz PCIe 5.0."
+            },
+            {
+                id: "qualcomm-snapdragon-x-elite",
+                name: "Qualcomm Snapdragon X Elite",
+                alias: "El salto de Windows on ARM y PCs con Copilot+ IA",
+                vendor: "Qualcomm",
+                vendorClass: "vendor-other",
+                category: ["risc", "modern"],
+                year: "2024 (Jun)",
+                bits: "64 bits ARMv8.7-A (Oryon)",
+                clock: "3.8 - 4.2 GHz Dual-Core Boost",
+                transistors: "Decenas de miles de millones",
+                process: "4 nm TSMC",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Snapdragon_X_Elite_Logo.svg/400px-Snapdragon_X_Elite_Logo.svg.png",
+                desc: "Equipado con 12 núcleos personalizados Oryon (desarrollados por ingenieros de Nuvia) y una NPU Hexagon de 45 TOPS para computación de IA local.",
+                highlight: "Inauguró la era de las computadoras 'Copilot+ PC' de Microsoft con compatibilidad y emulación avanzada de aplicaciones x86 en Windows 11."
+            },
+            {
+                id: "apple-m4-max",
+                name: "Apple M4 / M4 Max",
+                alias: "Procesamiento de 3 nanómetros de 2da generación e IA en el dispositivo",
+                vendor: "Apple",
+                vendorClass: "vendor-apple",
+                category: ["apple", "risc", "modern"],
+                year: "2024 (Nov)",
+                bits: "64 bits ARM (Apple Silicon)",
+                clock: "4.4 GHz",
+                transistors: "28,000M - 92,000M",
+                process: "3 nm TSMC N3E",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Apple_Silicon_M_family_logo.svg/400px-Apple_Silicon_M_family_logo.svg.png",
+                desc: "Fabricado con la litografía más avanzada de 3 nm (N3E). Incluye aceleración de trazado de rayos por hardware, códec AV1 y un Neural Engine de 38 TOPS optimizado para modelos LLM locales de Apple Intelligence.",
+                highlight: "Ostenta uno de los récords mundiales en rendimiento monohilo por vatio y ancho de banda de memoria de hasta 546 GB/s."
+            }
+        ];
+
+        function renderTimeline(list) {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 4rem 1rem; color: var(--text-dim);">
+                        <p style="font-size: 1.3rem; margin-bottom: 0.5rem;">No se encontraron microprocesadores con ese criterio de búsqueda.</p>
+                        <p style="font-size: 0.9rem;">Prueba con otro nombre, fabricante (Intel, AMD, Apple) o año.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.forEach((cpu, index) => {
+                const isLeft = index % 2 === 0;
+                const sideClass = isLeft ? 'left' : 'right';
+
+                const item = document.createElement('div');
+                item.className = `timeline-item ${sideClass}`;
+                item.innerHTML = `
+                    <div class="timeline-node"></div>
+                    <div class="chip-card">
+                        <div class="chip-header">
+                            <span class="chip-vendor ${cpu.vendorClass}">${cpu.vendor}</span>
+                            <span class="chip-year">${cpu.year}</span>
+                        </div>
+                        <h2 class="chip-name">${cpu.name}</h2>
+                        <div class="chip-alias">${cpu.alias}</div>
+
+                        <div class="chip-img-container">
+                            <img src="${cpu.image}" alt="${cpu.name}" class="chip-img" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/300px-No-Image-Placeholder.svg.png'">
+                        </div>
+
+                        <div class="specs-table">
+                            <div class="spec-item">
+                                <span class="spec-label">Ancho de Palabra</span>
+                                <span class="spec-val">${cpu.bits}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Frecuencia de Reloj</span>
+                                <span class="spec-val">${cpu.clock}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">N.º de Transistores</span>
+                                <span class="spec-val">${cpu.transistors}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Litografía / Nodo</span>
+                                <span class="spec-val">${cpu.process}</span>
+                            </div>
+                        </div>
+
+                        <p class="chip-desc">${cpu.desc}</p>
+                        <div class="chip-highlight">⚡ <strong>Hito clave:</strong> ${cpu.highlight}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Search & Filter Logic
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        let currentFilter = 'all';
+
+        function filterData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const filtered = processors.filter(cpu => {
+                const matchesQuery = 
+                    cpu.name.toLowerCase().includes(query) ||
+                    cpu.vendor.toLowerCase().includes(query) ||
+                    cpu.year.toLowerCase().includes(query) ||
+                    cpu.bits.toLowerCase().includes(query) ||
+                    cpu.desc.toLowerCase().includes(query) ||
+                    cpu.highlight.toLowerCase().includes(query);
+
+                if (currentFilter === 'all') return matchesQuery;
+                if (currentFilter === 'intel') return matchesQuery && cpu.category.includes('intel');
+                if (currentFilter === 'amd') return matchesQuery && cpu.category.includes('amd');
+                if (currentFilter === 'apple') return matchesQuery && cpu.category.includes('apple');
+                if (currentFilter === 'motorola') return matchesQuery && cpu.category.includes('motorola');
+                if (currentFilter === 'mos') return matchesQuery && (cpu.category.includes('mos') || cpu.category.includes('zilog'));
+                if (currentFilter === 'risc') return matchesQuery && cpu.category.includes('risc');
+                if (currentFilter === 'classic') return matchesQuery && cpu.category.includes('classic');
+                if (currentFilter === 'modern') return matchesQuery && cpu.category.includes('modern');
+                return matchesQuery;
+            });
+            renderTimeline(filtered);
+        }
+
+        searchInput.addEventListener('input', filterData);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                filterData();
+            });
+        });
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Initial render
+        renderTimeline(processors);
+    </script>
+</body>
+</html>
